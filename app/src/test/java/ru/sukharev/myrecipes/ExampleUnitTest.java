@@ -1,4 +1,4 @@
-package ru.sukharev.myreceipts;
+package ru.sukharev.myrecipes;
 
 import org.junit.Test;
 

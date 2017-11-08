@@ -1,4 +1,4 @@
-package ru.sukharev.myreceipts;
+package ru.sukharev.myrecipes;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("ru.sukharev.myreceipts", appContext.getPackageName());
+        assertEquals("ru.sukharev.myrecipes", appContext.getPackageName());
     }
 }
