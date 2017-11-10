@@ -10,7 +10,15 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
+    testOptions {
+        unitTests {
+            includeAndroidResources = true
+        }
+    }
     buildTypes {
+        debug {
+            applicationIdSuffix ".debug"
+        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
@@ -30,6 +38,10 @@ dependencies {
     testImplementation "junit:junit:$rootProject.ext.junitVersion"
     testImplementation "org.mockito:mockito-all:$rootProject.mockitoVersion"
     testImplementation "org.hamcrest:hamcrest-all:$rootProject.hamcrestVersion"
+    //Roboelectric
+    testImplementation "org.robolectric:robolectric:$rootProject.roboelectricVersion"
+    testImplementation "org.robolectric:shadows-support-v4:3.3.2"
+
 
     // Android Testing Support Library's runner and rules
     androidTestImplementation "com.android.support.test:runner:$rootProject.runnerVersion"

@@ -1,5 +1,6 @@
 package ru.sukharev.myrecipes.recipelist;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -9,7 +10,9 @@ import android.view.MenuItem;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import ru.sukharev.myrecipes.R;
+import ru.sukharev.myrecipes.addrecipe.AddRecipeActivity;
 
 public class RecipeListActivity extends AppCompatActivity {
 
@@ -17,6 +20,12 @@ public class RecipeListActivity extends AppCompatActivity {
     FloatingActionButton floatingActionButton;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
+
+    @OnClick(R.id.fab)
+    public void openAddRecipeActivity(){
+        Intent intent = new Intent(RecipeListActivity.this, AddRecipeActivity.class);
+        startActivity(intent);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

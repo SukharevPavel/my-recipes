@@ -9,10 +9,11 @@ import android.arch.persistence.room.PrimaryKey;
  * POJO that describes ingredient
  */
 
-@Entity(foreignKeys = @ForeignKey(entity = Ingredient.class,
+@Entity(foreignKeys = {@ForeignKey(entity = Ingredient.class,
         parentColumns = Ingredient.ID,
-        childColumns = RecipeIngredient.RECEIPT_ID))
-
+        childColumns = RecipeIngredient.INGREDIENT_ID), @ForeignKey(entity = Recipe.class,
+        parentColumns = Recipe.ID,
+        childColumns = RecipeIngredient.RECEIPT_ID)})
 public class RecipeIngredient {
 
     static final String RECEIPT_ID = "receipt_id";

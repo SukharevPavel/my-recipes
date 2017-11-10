@@ -43,4 +43,5 @@ ext {
     espressoVersion = '2.2.2'
     dexmakerVersion = '1.2'
     roomVersion = '1.0.0'
+    roboelectricVersion = '3.5.1'
 }
