@@ -14,16 +14,13 @@ import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
 
 import java.util.List;
-import java.util.concurrent.CountDownLatch;
 
 import ru.sukharev.myrecipes.R;
 import ru.sukharev.myrecipes.database.RecipeDatabase;
-import ru.sukharev.myrecipes.database.dao.RecipeDao;
 import ru.sukharev.myrecipes.pojo.Recipe;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
-import static org.junit.Assert.fail;
 
 @RunWith(RobolectricTestRunner.class)
 public class AddRecipeActivityTest {
@@ -33,9 +30,6 @@ public class AddRecipeActivityTest {
 
     RecipeDatabase database;
 
-    RecipeDao recipeDao;
-
-    List<Recipe> recipes;
 
     @Before
     public void mockSetup(){
@@ -45,14 +39,16 @@ public class AddRecipeActivityTest {
     @Before
     public void createDb() {
         Context context = RuntimeEnvironment.application;
-        database = Room.inMemoryDatabaseBuilder(context, RecipeDatabase.class).build();
+        database = Room.inMemoryDatabaseBuilder(context, RecipeDatabase.class).
+                allowMainThreadQueries().
+                build();
+        RecipeDatabase.setDatabase(database);
     }
     @Test
     public void fabClick_addNewRecipe(){
         AddRecipeActivity activity = Robolectric.setupActivity(AddRecipeActivity.class);
         AddRecipeFragment fragment = (AddRecipeFragment) activity.getSupportFragmentManager().findFragmentById(R.id.add_recipe_fragment);
         AddRecipePresenter.init(activity, fragment);
-        RecipeDatabase.setDatabase(database);
         String title = "testTitle";
         Integer rating = 5;
         String description = "test description which is not very long";
@@ -60,23 +56,7 @@ public class AddRecipeActivityTest {
         ((EditText) fragment.getView().findViewById(R.id.add_recipe_rating)).setText(String.valueOf(rating));
         ((EditText) fragment.getView().findViewById(R.id.add_recipe_desc)).setText(description);
         activity.findViewById(R.id.fab).performClick();
-        final CountDownLatch latch = new CountDownLatch(1);
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    recipes = database.getRecipeDao().getAllRecipes();
-
-                } finally {
-                    latch.countDown();
-                }
-            }
-        }).start();
-        try {
-            latch.await();
-        } catch (InterruptedException e) {
-            fail("Interrupted");
-        }
+        List<Recipe> recipes = database.getRecipeDao().getAllRecipes();
         assertThat(recipes.size(), equalTo(1));
         Recipe recipe = recipes.get(0);
         assertThat(recipes.get(0).title,equalTo(title));

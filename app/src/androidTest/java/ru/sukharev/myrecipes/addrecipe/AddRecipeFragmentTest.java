@@ -52,6 +52,7 @@ public class AddRecipeFragmentTest {
         AppCompatActivity activity = mActivityTestRule.getActivity();
         AddRecipeFragment fragment = (AddRecipeFragment) activity.getSupportFragmentManager().findFragmentById(R.id.add_recipe_fragment);
         AddRecipePresenter.init(activity, fragment);
+        RecipeDatabase.setDatabase(database);
         String title = "testTitle";
         Integer rating = 5;
         String description = "test description which is not very long";
@@ -59,13 +60,19 @@ public class AddRecipeFragmentTest {
         ((EditText) fragment.getView().findViewById(R.id.add_recipe_rating)).setText(String.valueOf(rating));
         ((EditText) fragment.getView().findViewById(R.id.add_recipe_desc)).setText(description);
         activity.findViewById(R.id.fab).performClick();
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            fail("Interrupted");
+        }
         final CountDownLatch latch = new CountDownLatch(1);
         new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
-                    recipes = recipeDao.getAllRecipes();
-
+                    recipes = database.getRecipeDao().getAllRecipes();
+                } catch (Exception ex) {
+                    ex.printStackTrace();
                 } finally {
                     latch.countDown();
                 }

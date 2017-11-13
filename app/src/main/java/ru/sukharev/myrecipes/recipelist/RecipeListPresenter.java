@@ -1,7 +1,11 @@
 package ru.sukharev.myrecipes.recipelist;
 
-import java.util.ArrayList;
+import android.content.Context;
+import android.os.AsyncTask;
 
+import java.util.List;
+
+import ru.sukharev.myrecipes.database.RecipeDatabase;
 import ru.sukharev.myrecipes.pojo.Recipe;
 
 /**
@@ -14,12 +18,15 @@ public class RecipeListPresenter implements RecipeListContract.Presenter{
 
     private RecipeListContract.View view;
 
-    private RecipeListPresenter() {
+    private RecipeDatabase database;
+
+    private RecipeListPresenter(Context context) {
+        database = RecipeDatabase.getInstance(context.getApplicationContext());
     }
 
-    static RecipeListPresenter init(RecipeListContract.View view){
+    static RecipeListPresenter init(Context context, RecipeListContract.View view){
         if (instance == null) {
-            instance = new RecipeListPresenter();
+            instance = new RecipeListPresenter(context);
         }
         instance.setView(view);
         return instance;
@@ -40,6 +47,29 @@ public class RecipeListPresenter implements RecipeListContract.Presenter{
 
     @Override
     public void start() {
-        view.showList(new ArrayList<Recipe>());
+        new GetRecipesList() {
+            @Override
+            void result(List<Recipe> recipes) {
+                view.showList(recipes);
+            }
+        }.execute();
+    }
+
+    private abstract class GetRecipesList extends AsyncTask<Void, Void, List<Recipe>> {
+
+
+        @Override
+        protected List<Recipe> doInBackground(Void... voids) {
+            return database.getRecipeDao().getAllRecipes();
+        }
+
+        @Override
+        protected void onPostExecute(List<Recipe> recipes) {
+            super.onPostExecute(recipes);
+            result(recipes);
+
+        }
+
+        abstract void result(List<Recipe> recipes);
     }
 }

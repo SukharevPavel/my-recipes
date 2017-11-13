@@ -39,17 +39,12 @@ public class RecipeListPresenterTest {
 
     @Before
     public void setup(){
-        fragment = mock(RecipeListFragment.class);
-        presenter = RecipeListPresenter.init(fragment);
-    }
-
-    @Before
-    public void createDb() {
         Context context = RuntimeEnvironment.application;
         database = Room.inMemoryDatabaseBuilder(context, RecipeDatabase.class).build();
+        fragment = mock(RecipeListFragment.class);
+        presenter = RecipeListPresenter.init(context, fragment);
         recipeDao = database.getRecipeDao();
     }
-
 
     @Test
     public void start_showList(){

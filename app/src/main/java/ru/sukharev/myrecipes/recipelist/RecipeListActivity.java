@@ -34,7 +34,7 @@ public class RecipeListActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
         RecipeListFragment fragment = (RecipeListFragment) getSupportFragmentManager().findFragmentById(R.id.recipe_list_fragment);
-        RecipeListPresenter.init(fragment);
+        RecipeListPresenter.init(this, fragment);
     }
 
     @Override
