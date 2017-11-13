@@ -42,7 +42,6 @@ dependencies {
     testImplementation "org.robolectric:robolectric:$rootProject.roboelectricVersion"
     testImplementation "org.robolectric:shadows-support-v4:3.3.2"
 
-
     // Android Testing Support Library's runner and rules
     androidTestImplementation "com.android.support.test:runner:$rootProject.runnerVersion"
     androidTestImplementation "com.android.support.test:rules:$rootProject.runnerVersion"

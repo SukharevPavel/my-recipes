@@ -50,4 +50,14 @@ public class AddRecipeFragment extends Fragment implements AddRecipeContract.Vie
     public void setPresenter(AddRecipeContract.Presenter presenter) {
         this.presenter = presenter;
     }
+
+    @Override
+    public void onRecipeAdded() {
+        getActivity().finish();
+    }
+
+    @Override
+    public void onRecipeAddingError() {
+
+    }
 }

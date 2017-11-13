@@ -66,7 +66,7 @@ public class RecipeListFragment extends Fragment implements RecipeListContract.V
 
     private void setListItems(List<Recipe> list) {
         recipeRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        recipeRecyclerView.setAdapter(new recipeListAdapter(list));
+        recipeRecyclerView.setAdapter(new RecipeListAdapter(list));
     }
 
     @Override
@@ -74,11 +74,11 @@ public class RecipeListFragment extends Fragment implements RecipeListContract.V
         this.presenter = presenter;
     }
 
-    public static class recipeListAdapter extends RecyclerView.Adapter<recipeListAdapter.ViewHolder> {
+    public static class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.ViewHolder> {
 
         private List<Recipe> recipes;
 
-        public recipeListAdapter(List<Recipe> recipes) {
+        public RecipeListAdapter(List<Recipe> recipes) {
             this.recipes = recipes;
         }
 
@@ -90,7 +90,7 @@ public class RecipeListFragment extends Fragment implements RecipeListContract.V
 
         @Override
         public void onBindViewHolder(ViewHolder holder, int position) {
-                Recipe recipe = new Recipe();
+                Recipe recipe = recipes.get(position);
                 holder.title.setText(recipe.title);
         }
 

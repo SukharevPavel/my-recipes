@@ -24,6 +24,11 @@
             android:label="@string/title_activity_main"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
+        <activity
+            android:name=".addingredient.AddIngredientActivity"
+            android:label="@string/title_activity_add_ingredient"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
     </application>
 
 </manifest>

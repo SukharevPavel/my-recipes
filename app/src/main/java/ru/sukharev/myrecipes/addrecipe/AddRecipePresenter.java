@@ -3,6 +3,7 @@ package ru.sukharev.myrecipes.addrecipe;
 import android.content.Context;
 
 import ru.sukharev.myrecipes.database.RecipeDatabase;
+import ru.sukharev.myrecipes.database.dao.RecipeDao;
 import ru.sukharev.myrecipes.pojo.Recipe;
 
 /**
@@ -46,12 +47,20 @@ public class AddRecipePresenter implements AddRecipeContract.Presenter {
                 .setRating(rating)
                 .setDescription(desc)
                 .build();
-        new Thread(new Runnable() {
+        new RecipeDao.AppRecipeAsyncTask() {
             @Override
-            public void run() {
-                database.getRecipeDao().addRecipe(recipe);
+            public void result(long result) {
+                if (result >= 0) {
+                    view.onRecipeAdded();
+                } else {
+                    view.onRecipeAddingError();
+                }
             }
-        }).start();
+        }
+        .setDao(database.getRecipeDao())
+        .execute(recipe);
 
     }
+
+
 }

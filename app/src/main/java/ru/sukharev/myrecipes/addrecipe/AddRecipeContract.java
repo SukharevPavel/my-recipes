@@ -11,6 +11,9 @@ public interface AddRecipeContract {
 
     interface View extends BaseView<Presenter>{
 
+        void onRecipeAdded();
+
+        void onRecipeAddingError();
     }
 
     interface Presenter extends BasePresenter<View> {
