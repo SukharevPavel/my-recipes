@@ -1,6 +1,5 @@
 package ru.sukharev.myrecipes.recipelist;
 
-import android.arch.persistence.room.Room;
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.rule.ActivityTestRule;
@@ -11,7 +10,6 @@ import org.junit.Test;
 import org.mockito.Mock;
 
 import ru.sukharev.myrecipes.R;
-import ru.sukharev.myrecipes.database.RecipeDatabase;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
@@ -40,8 +38,8 @@ public class RecipeListFragmentTest {
     @Before
     public void createDb() {
         Context context = InstrumentationRegistry.getTargetContext();
-        database = Room.inMemoryDatabaseBuilder(context, RecipeDatabase.class).build();
-        recipeDao = database.getRecipeDao();
+       // database = Room.inMemoryDatabaseBuilder(context, RecipeDatabase.class).build();
+        //recipeDao = database.getRecipeDao();
     }
 
     @Test

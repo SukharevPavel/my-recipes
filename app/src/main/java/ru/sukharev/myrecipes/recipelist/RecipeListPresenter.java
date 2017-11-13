@@ -27,7 +27,7 @@ public class RecipeListPresenter implements RecipeListContract.Presenter{
 
 
     private void setView(RecipeListContract.View view){
-        if (!view.equals(instance.view)) {
+        if (!view.equals(this.view)) {
             instance.view = view;
             instance.view.setPresenter(this);
         }
