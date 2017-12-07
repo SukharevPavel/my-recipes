@@ -2,6 +2,7 @@ package ru.sukharev.myrecipes.addrecipe;
 
 import android.arch.persistence.room.Room;
 import android.content.Context;
+import android.support.design.widget.TextInputLayout;
 import android.widget.EditText;
 
 import org.junit.Before;
@@ -21,9 +22,10 @@ import ru.sukharev.myrecipes.pojo.Recipe;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+import static org.mockito.Mockito.verify;
 
 @RunWith(RobolectricTestRunner.class)
-public class AddRecipeActivityTest {
+public class AddRecipeRobolectricTest {
 
     @Mock
     AddRecipePresenter mockPresenter;
@@ -59,12 +61,23 @@ public class AddRecipeActivityTest {
         List<Recipe> recipes = database.getRecipeDao().getAllRecipes();
         assertThat(recipes.size(), equalTo(1));
         Recipe recipe = recipes.get(0);
-        assertThat(recipes.get(0).title,equalTo(title));
-        assertThat(recipes.get(0).rating,equalTo(rating));
-        assertThat(recipes.get(0).description,equalTo(description));
+        assertThat(recipe.title,equalTo(title));
+        assertThat(recipe.rating,equalTo(rating));
+        assertThat(recipe.description,equalTo(description));
     }
 
-   /* @Test
+    @Test
+    public void fabClick_notifyEmptyTitle(){
+        AddRecipeActivity activity = Robolectric.setupActivity(AddRecipeActivity.class);
+        AddRecipeFragment fragment = (AddRecipeFragment) activity.getSupportFragmentManager().findFragmentById(R.id.add_recipe_fragment);
+        AddRecipePresenter.init(activity, fragment);
+        activity.findViewById(R.id.fab).performClick();
+        TextInputLayout titleLayout = fragment.getView().findViewById(R.id.add_recipe_title_til);
+        assertThat(titleLayout.isErrorEnabled(),equalTo(true));
+        assertThat(titleLayout.getError().toString(), equalTo(activity.getString(R.string.add_recipe_title_error)));
+    }
+
+    @Test
     public void fabClick_presenterIsCalled(){
         AddRecipeActivity activity = Robolectric.setupActivity(AddRecipeActivity.class);
         AddRecipeFragment fragment = (AddRecipeFragment) activity.getSupportFragmentManager().findFragmentById(R.id.add_recipe_fragment);
@@ -77,8 +90,25 @@ public class AddRecipeActivityTest {
         ((EditText) fragment.getView().findViewById(R.id.add_recipe_desc)).setText(description);
         activity.findViewById(R.id.fab).performClick();
         verify(mockPresenter).addRecipe(title, rating, description);
-    }*/
+    }
 
 
-
+    @Test
+    public void addRecipe_recipeIsAdded(){
+        String title = "testTitle";
+        Integer rating = 5;
+        String description = "test description which is not very long";
+        Recipe recipe = new Recipe.Builder()
+                .setTitle(title)
+                .setRating(rating)
+                .setDescription(description)
+                .build();
+        database.getRecipeDao().addRecipe(recipe);
+        List<Recipe> recipes = database.getRecipeDao().getAllRecipes();
+        assertThat(recipes.size(), equalTo(1));
+        recipe = recipes.get(0);
+        assertThat(recipe.title,equalTo(title));
+        assertThat(recipe.rating,equalTo(rating));
+        assertThat(recipe.description,equalTo(description));
+    }
 }

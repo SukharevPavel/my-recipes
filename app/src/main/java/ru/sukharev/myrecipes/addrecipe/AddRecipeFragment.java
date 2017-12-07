@@ -1,6 +1,7 @@
 package ru.sukharev.myrecipes.addrecipe;
 
 import android.os.Bundle;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,6 +29,8 @@ public class AddRecipeFragment extends Fragment implements AddRecipeContract.Vie
     EditText ratingEdit;
     @BindView(R.id.add_recipe_desc)
     EditText descEdit;
+    @BindView(R.id.add_recipe_title_til)
+    TextInputLayout titleTil;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -43,7 +46,13 @@ public class AddRecipeFragment extends Fragment implements AddRecipeContract.Vie
         String title = titleEdit.getText().toString();
         int rating = Integer.valueOf(ratingEdit.getText().toString());
         String desc = descEdit.getText().toString();
-        presenter.addRecipe(title, rating, desc);
+        if (!title.isEmpty()) {
+            titleTil.setErrorEnabled(false);
+            presenter.addRecipe(title, rating, desc);
+        } else {
+            titleTil.setErrorEnabled(true);
+            titleTil.setError(getString(R.string.add_recipe_title_error));
+        }
     }
 
     @Override

@@ -33,7 +33,6 @@ public class AddRecipeActivity extends AppCompatActivity {
         });
     }
 
-
     //used for passing activity events to fragments
     public interface Listener {
 

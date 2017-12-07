@@ -59,7 +59,6 @@ public class AddRecipePresenter implements AddRecipeContract.Presenter {
         }
         .setDao(database.getRecipeDao())
         .execute(recipe);
-
     }
 
 

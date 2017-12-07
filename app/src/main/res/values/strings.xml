@@ -4,4 +4,5 @@
     <string name="recipe_list_no_items">No items!</string>
     <string name="title_activity_main">AddRecipeActivity</string>
     <string name="title_activity_add_ingredient">AddIngredientActivity</string>
+    <string name="add_recipe_title_error">Wrong title for recipe</string>
 </resources>
