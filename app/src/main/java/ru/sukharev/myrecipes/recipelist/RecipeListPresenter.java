@@ -1,15 +1,15 @@
 package ru.sukharev.myrecipes.recipelist;
 
 import android.content.Context;
-import android.os.AsyncTask;
 
 import java.util.List;
 
-import ru.sukharev.myrecipes.database.RecipeDatabase;
+import ru.sukharev.myrecipes.model.IModel;
+import ru.sukharev.myrecipes.model.RecipeRepository;
 import ru.sukharev.myrecipes.pojo.Recipe;
 
 /**
- * Created by pasha on 07.11.17.
+ * Presenter for view which shows list of all recipes
  */
 
 public class RecipeListPresenter implements RecipeListContract.Presenter{
@@ -18,10 +18,10 @@ public class RecipeListPresenter implements RecipeListContract.Presenter{
 
     private RecipeListContract.View view;
 
-    private RecipeDatabase database;
+    private IModel recipeModel;
 
     private RecipeListPresenter(Context context) {
-        database = RecipeDatabase.getInstance(context.getApplicationContext());
+        recipeModel = RecipeRepository.getInstance(context.getApplicationContext());
     }
 
     static RecipeListPresenter init(Context context, RecipeListContract.View view){
@@ -47,29 +47,13 @@ public class RecipeListPresenter implements RecipeListContract.Presenter{
 
     @Override
     public void start() {
-        new GetRecipesList() {
+        recipeModel.getRecipes(new IModel.GetRecipesCallback() {
             @Override
-            void result(List<Recipe> recipes) {
+            public void onResult(List<Recipe> recipes) {
                 view.showList(recipes);
             }
-        }.execute();
+        });
     }
 
-    private abstract class GetRecipesList extends AsyncTask<Void, Void, List<Recipe>> {
 
-
-        @Override
-        protected List<Recipe> doInBackground(Void... voids) {
-            return database.getRecipeDao().getAllRecipes();
-        }
-
-        @Override
-        protected void onPostExecute(List<Recipe> recipes) {
-            super.onPostExecute(recipes);
-            result(recipes);
-
-        }
-
-        abstract void result(List<Recipe> recipes);
-    }
 }

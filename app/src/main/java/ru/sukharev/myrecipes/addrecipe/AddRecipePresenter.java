@@ -2,8 +2,8 @@ package ru.sukharev.myrecipes.addrecipe;
 
 import android.content.Context;
 
-import ru.sukharev.myrecipes.database.RecipeDatabase;
-import ru.sukharev.myrecipes.database.dao.RecipeDao;
+import ru.sukharev.myrecipes.model.IModel;
+import ru.sukharev.myrecipes.model.RecipeRepository;
 import ru.sukharev.myrecipes.pojo.Recipe;
 
 /**
@@ -14,18 +14,17 @@ public class AddRecipePresenter implements AddRecipeContract.Presenter {
     private static AddRecipePresenter instance;
 
     private AddRecipeContract.View view;
-    private RecipeDatabase database;
+    private IModel recipeModel;
 
     private AddRecipePresenter(Context context) {
-        database = RecipeDatabase.getInstance(context);
+        recipeModel = RecipeRepository.getInstance(context);
     }
 
-    static AddRecipePresenter init(Context context, AddRecipeContract.View view){
+    static void init(Context context, AddRecipeContract.View view){
         if (instance == null) {
             instance = new AddRecipePresenter(context.getApplicationContext());
         }
         instance.setView(view);
-        return instance;
     }
 
     private void setView(AddRecipeContract.View view) {
@@ -47,18 +46,17 @@ public class AddRecipePresenter implements AddRecipeContract.Presenter {
                 .setRating(rating)
                 .setDescription(desc)
                 .build();
-        new RecipeDao.AppRecipeAsyncTask() {
+        recipeModel.addRecipe(recipe, new IModel.AddRecipeCallback() {
             @Override
-            public void result(long result) {
-                if (result >= 0) {
-                    view.onRecipeAdded();
-                } else {
-                    view.onRecipeAddingError();
-                }
+            public void onSuccess(long result) {
+                view.onRecipeAdded();
             }
-        }
-        .setDao(database.getRecipeDao())
-        .execute(recipe);
+
+            @Override
+            public void onFail() {
+                view.onRecipeAddingError();
+            }
+        });
     }
 
 
