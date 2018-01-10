@@ -20,7 +20,7 @@ public abstract class RecipeDatabase extends RoomDatabase {
     public final static String DATABASE_NAME = "RecipeDatabase";
     private static RecipeDatabase instance;
 
-    @VisibleForTesting
+    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
     public static void setDatabase(RecipeDatabase database) {
         instance = database;
     }

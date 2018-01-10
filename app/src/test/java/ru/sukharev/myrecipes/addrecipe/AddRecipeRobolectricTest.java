@@ -22,7 +22,6 @@ import ru.sukharev.myrecipes.pojo.Recipe;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
-import static org.mockito.Mockito.verify;
 
 @RunWith(RobolectricTestRunner.class)
 public class AddRecipeRobolectricTest {
@@ -32,14 +31,9 @@ public class AddRecipeRobolectricTest {
 
     RecipeDatabase database;
 
-
     @Before
-    public void mockSetup(){
+    public void setup() {
         mockPresenter = Mockito.mock(AddRecipePresenter.class);
-    }
-
-    @Before
-    public void createDb() {
         Context context = RuntimeEnvironment.application;
         database = Room.inMemoryDatabaseBuilder(context, RecipeDatabase.class).
                 allowMainThreadQueries().
@@ -51,7 +45,7 @@ public class AddRecipeRobolectricTest {
         AddRecipeActivity activity = Robolectric.setupActivity(AddRecipeActivity.class);
         AddRecipeFragment fragment = (AddRecipeFragment) activity.getSupportFragmentManager().findFragmentById(R.id.add_recipe_fragment);
         AddRecipePresenter.init(activity, fragment);
-        String title = "testTitle";
+        String title = "fabClick_addNewRecipe";
         Integer rating = 5;
         String description = "test description which is not very long";
         ((EditText) fragment.getView().findViewById(R.id.add_recipe_title)).setText(title);
@@ -59,11 +53,10 @@ public class AddRecipeRobolectricTest {
         ((EditText) fragment.getView().findViewById(R.id.add_recipe_desc)).setText(description);
         activity.findViewById(R.id.fab).performClick();
         List<Recipe> recipes = database.getRecipeDao().getAllRecipes();
-        assertThat(recipes.size(), equalTo(1));
-        Recipe recipe = recipes.get(0);
-        assertThat(recipe.title,equalTo(title));
-        assertThat(recipe.rating,equalTo(rating));
-        assertThat(recipe.description,equalTo(description));
+        Recipe lastRecipe = recipes.get(recipes.size() - 1);
+        assertThat(lastRecipe.title,equalTo(title));
+        assertThat(lastRecipe.rating,equalTo(rating));
+        assertThat(lastRecipe.description,equalTo(description));
     }
 
     @Test
@@ -78,24 +71,8 @@ public class AddRecipeRobolectricTest {
     }
 
     @Test
-    public void fabClick_presenterIsCalled(){
-        AddRecipeActivity activity = Robolectric.setupActivity(AddRecipeActivity.class);
-        AddRecipeFragment fragment = (AddRecipeFragment) activity.getSupportFragmentManager().findFragmentById(R.id.add_recipe_fragment);
-        fragment.setPresenter(mockPresenter);
-        String title = "testTitle";
-        Integer rating = 5;
-        String description = "test description which is not very long";
-        ((EditText) fragment.getView().findViewById(R.id.add_recipe_title)).setText(title);
-        ((EditText) fragment.getView().findViewById(R.id.add_recipe_rating)).setText(String.valueOf(rating));
-        ((EditText) fragment.getView().findViewById(R.id.add_recipe_desc)).setText(description);
-        activity.findViewById(R.id.fab).performClick();
-        verify(mockPresenter).addRecipe(title, rating, description);
-    }
-
-
-    @Test
     public void addRecipe_recipeIsAdded(){
-        String title = "testTitle";
+        String title = "addRecipe_recipeIsAdded";
         Integer rating = 5;
         String description = "test description which is not very long";
         Recipe recipe = new Recipe.Builder()
@@ -105,10 +82,9 @@ public class AddRecipeRobolectricTest {
                 .build();
         database.getRecipeDao().addRecipe(recipe);
         List<Recipe> recipes = database.getRecipeDao().getAllRecipes();
-        assertThat(recipes.size(), equalTo(1));
-        recipe = recipes.get(0);
-        assertThat(recipe.title,equalTo(title));
-        assertThat(recipe.rating,equalTo(rating));
-        assertThat(recipe.description,equalTo(description));
+        Recipe lastRecipe = recipes.get(recipes.size() - 1);
+        assertThat(lastRecipe.title,equalTo(title));
+        assertThat(lastRecipe.rating,equalTo(rating));
+        assertThat(lastRecipe.description,equalTo(description));
     }
 }

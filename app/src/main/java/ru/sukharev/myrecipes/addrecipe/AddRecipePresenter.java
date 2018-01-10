@@ -16,6 +16,8 @@ public class AddRecipePresenter implements AddRecipeContract.Presenter {
     private AddRecipeContract.View view;
     private IModel recipeModel;
 
+    private int currentRating = 0;
+
     private AddRecipePresenter(Context context) {
         recipeModel = RecipeRepository.getInstance(context);
     }
@@ -36,14 +38,14 @@ public class AddRecipePresenter implements AddRecipeContract.Presenter {
 
     @Override
     public void start() {
-
+        view.setRating(currentRating);
     }
 
     @Override
-    public void addRecipe(String title, int rating, String desc) {
+    public void addRecipe(String title, String desc) {
         final Recipe recipe = new Recipe.Builder()
                 .setTitle(title)
-                .setRating(rating)
+                .setRating(currentRating)
                 .setDescription(desc)
                 .build();
         recipeModel.addRecipe(recipe, new IModel.AddRecipeCallback() {
@@ -57,6 +59,12 @@ public class AddRecipePresenter implements AddRecipeContract.Presenter {
                 view.onRecipeAddingError();
             }
         });
+    }
+
+    @Override
+    public void setRating(int rating) {
+        currentRating = rating;
+        view.setRating(currentRating);
     }
 
 

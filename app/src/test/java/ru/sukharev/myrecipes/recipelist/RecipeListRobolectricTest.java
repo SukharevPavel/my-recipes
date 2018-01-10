@@ -3,7 +3,6 @@ package ru.sukharev.myrecipes.recipelist;
 import android.arch.persistence.room.Room;
 import android.content.Context;
 import android.content.Intent;
-import android.test.UiThreadTest;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -55,12 +54,11 @@ public class RecipeListRobolectricTest {
     }
 
     @Test
-    @UiThreadTest
     public void start_showList(){
         presenter.start();
         recipes = recipeDao.getAllRecipes();
         verify(fragment).showList(recipes);
-        assertThat(2, equalTo(recipes.size()));
+        assertThat(1, equalTo(recipes.size()));
     }
 
     @Test
@@ -74,11 +72,9 @@ public class RecipeListRobolectricTest {
         recipes = recipeDao.getAllRecipes();
         assertThat(recipes.size(), equalTo(1));
         assertThat(recipes.get(0), equalTo(recipe));
-
     }
 
     @Test
-    @UiThreadTest
     public void fabClick_openAddRecipeActivity(){
         RecipeListActivity activity = Robolectric.setupActivity(RecipeListActivity.class);
         activity.findViewById(R.id.fab).performClick();
