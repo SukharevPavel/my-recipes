@@ -20,7 +20,7 @@ public final class RecipeRepository implements IModel{
 
     private RecipeRepository(Context context) {
         this.appContext = context.getApplicationContext();
-        database = RecipeDatabase.getInstance(appContext);
+        database = RecipeDatabase.Companion.getInstance(appContext);
     }
 
     public static RecipeRepository getInstance(Context context){

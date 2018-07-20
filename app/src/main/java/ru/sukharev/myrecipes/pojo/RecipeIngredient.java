@@ -10,9 +10,9 @@ import android.arch.persistence.room.PrimaryKey;
  */
 
 @Entity(foreignKeys = {@ForeignKey(entity = Ingredient.class,
-        parentColumns = Ingredient.ID,
+        parentColumns = Ingredient.Companion.getID(),
         childColumns = RecipeIngredient.INGREDIENT_ID), @ForeignKey(entity = Recipe.class,
-        parentColumns = Recipe.ID,
+        parentColumns = Recipe.Companion.getID(),
         childColumns = RecipeIngredient.RECEIPT_ID)})
 public class RecipeIngredient {
 

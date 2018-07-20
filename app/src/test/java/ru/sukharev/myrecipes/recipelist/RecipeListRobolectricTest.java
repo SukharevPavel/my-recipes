@@ -47,9 +47,9 @@ public class RecipeListRobolectricTest {
         database = Room.inMemoryDatabaseBuilder(context, RecipeDatabase.class)
                 .allowMainThreadQueries()
                 .build();
-        RecipeDatabase.setDatabase(database);
+        RecipeDatabase.Companion.setDatabase(database);
         fragment = mock(RecipeListFragment.class);
-        presenter = RecipeListPresenter.init(context, fragment);
+        presenter = RecipeListPresenter.Companion.init(context, fragment);
         recipeDao = database.getRecipeDao();
     }
 

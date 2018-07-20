@@ -41,9 +41,9 @@ public class RecipeListAndroidTest {
         database = Room.inMemoryDatabaseBuilder(InstrumentationRegistry.getContext(), RecipeDatabase.class)
                 .allowMainThreadQueries()
                 .build();
-        RecipeDatabase.setDatabase(database);
+        RecipeDatabase.Companion.setDatabase(database);
         fragment = mock(RecipeListFragment.class);
-        presenter = RecipeListPresenter.init(InstrumentationRegistry.getContext(), fragment);
+        presenter = RecipeListPresenter.Companion.init(InstrumentationRegistry.getContext(), fragment);
     }
 
     @Test

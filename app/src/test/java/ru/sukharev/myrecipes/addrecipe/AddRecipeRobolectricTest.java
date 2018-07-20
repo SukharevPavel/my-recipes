@@ -38,13 +38,13 @@ public class AddRecipeRobolectricTest {
         database = Room.inMemoryDatabaseBuilder(context, RecipeDatabase.class).
                 allowMainThreadQueries().
                 build();
-        RecipeDatabase.setDatabase(database);
+        RecipeDatabase.Companion.setDatabase(database);
     }
     @Test
     public void fabClick_addNewRecipe(){
         AddRecipeActivity activity = Robolectric.setupActivity(AddRecipeActivity.class);
         AddRecipeFragment fragment = (AddRecipeFragment) activity.getSupportFragmentManager().findFragmentById(R.id.add_recipe_fragment);
-        AddRecipePresenter.init(activity, fragment);
+        AddRecipePresenter.Companion.init(activity, fragment);
         String title = "fabClick_addNewRecipe";
         Integer rating = 5;
         String description = "test description which is not very long";
@@ -54,16 +54,16 @@ public class AddRecipeRobolectricTest {
         activity.findViewById(R.id.fab).performClick();
         List<Recipe> recipes = database.getRecipeDao().getAllRecipes();
         Recipe lastRecipe = recipes.get(recipes.size() - 1);
-        assertThat(lastRecipe.title,equalTo(title));
-        assertThat(lastRecipe.rating,equalTo(rating));
-        assertThat(lastRecipe.description,equalTo(description));
+        assertThat(lastRecipe.getTitle(),equalTo(title));
+        assertThat(lastRecipe.getRating(),equalTo(rating));
+        assertThat(lastRecipe.getDescription(),equalTo(description));
     }
 
     @Test
     public void fabClick_notifyEmptyTitle(){
         AddRecipeActivity activity = Robolectric.setupActivity(AddRecipeActivity.class);
         AddRecipeFragment fragment = (AddRecipeFragment) activity.getSupportFragmentManager().findFragmentById(R.id.add_recipe_fragment);
-        AddRecipePresenter.init(activity, fragment);
+        AddRecipePresenter.Companion.init(activity, fragment);
         activity.findViewById(R.id.fab).performClick();
         TextInputLayout titleLayout = fragment.getView().findViewById(R.id.add_recipe_title_til);
         assertThat(titleLayout.isErrorEnabled(),equalTo(true));
@@ -83,8 +83,8 @@ public class AddRecipeRobolectricTest {
         database.getRecipeDao().addRecipe(recipe);
         List<Recipe> recipes = database.getRecipeDao().getAllRecipes();
         Recipe lastRecipe = recipes.get(recipes.size() - 1);
-        assertThat(lastRecipe.title,equalTo(title));
-        assertThat(lastRecipe.rating,equalTo(rating));
-        assertThat(lastRecipe.description,equalTo(description));
+        assertThat(lastRecipe.getTitle(),equalTo(title));
+        assertThat(lastRecipe.getRating(),equalTo(rating));
+        assertThat(lastRecipe.getDescription(),equalTo(description));
     }
 }

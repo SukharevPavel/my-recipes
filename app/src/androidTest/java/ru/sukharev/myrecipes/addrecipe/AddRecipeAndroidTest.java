@@ -49,7 +49,7 @@ public class AddRecipeAndroidTest {
         database = Room.inMemoryDatabaseBuilder(context, RecipeDatabase.class)
                 .allowMainThreadQueries()
                 .build();
-        RecipeDatabase.setDatabase(database);
+        RecipeDatabase.Companion.setDatabase(database);
         recipeDao = database.getRecipeDao();
     }
 
@@ -74,9 +74,9 @@ public class AddRecipeAndroidTest {
         recipes = database.getRecipeDao().getAllRecipes();
         assertThat(recipes.size(), equalTo(1));
         Recipe recipe = recipes.get(0);
-        assertThat(recipe.title,equalTo(title));
-        assertThat(recipe.rating,equalTo(rating));
-        assertThat(recipe.description,equalTo(description));
+        assertThat(recipe.getTitle(),equalTo(title));
+        assertThat(recipe.getRating(),equalTo(rating));
+        assertThat(recipe.getDescription(),equalTo(description));
     }
 
 }
